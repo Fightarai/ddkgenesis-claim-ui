@@ -1,24 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import api from "../lib/api";
 
-// 🌍 ISO Country → Full Name
 const countryMap = {
   MY: "Malaysia", ID: "Indonesia", BD: "Bangladesh", IN: "India", PH: "Philippines",
   SG: "Singapore", TH: "Thailand", VN: "Vietnam", JP: "Japan", CN: "China",
   US: "United States", GB: "United Kingdom", AU: "Australia", CA: "Canada", AE: "UAE"
 };
 
-// 🇺🇳 Convert country code to emoji flag
 const getFlagEmoji = (code) =>
   code?.toUpperCase().replace(/./g, c =>
     String.fromCodePoint(127397 + c.charCodeAt())
   );
+
+const getTimeSince = (date) => {
+  const now = new Date();
+  const then = new Date(date);
+  const diff = now - then;
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const years = Math.floor(days / 365);
+  const remainingDays = days % 365;
+  return `${years}y ${remainingDays}d ago`;
+};
 
 export default function Home() {
   const [username, setUsername] = useState("");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [stats, setStats] = useState(null);
 
   const checkClaim = async () => {
     setLoading(true);
@@ -33,14 +42,16 @@ export default function Home() {
     setLoading(false);
   };
 
+  useEffect(() => {
+    api.get("/api/claim-stats").then(res => setStats(res.data)).catch(() => {});
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#0d0d0d] text-white font-sans px-6 py-10 flex flex-col items-center justify-center">
-      {/* Title */}
       <h1 className="text-3xl md:text-4xl font-bold text-purple-400 mb-10 text-center">
         🔍 Check Your DDK Legacy (Pre-order ETPS) for vGRAMX
       </h1>
 
-      {/* Input */}
       <div className="bg-[#121212] border border-purple-700 rounded-xl shadow-lg p-6 w-full max-w-md mb-8">
         <label className="block text-sm text-purple-300 mb-2">Username or Email</label>
         <input
@@ -59,7 +70,6 @@ export default function Home() {
         </button>
       </div>
 
-      {/* Output */}
       <div className="w-full max-w-2xl bg-[#0f0f0f] border border-[#3b1367] rounded-xl shadow-xl p-6 text-sm sm:text-base space-y-3">
         {result ? (
           <>
@@ -68,41 +78,35 @@ export default function Home() {
             <p><strong>📧 Email:</strong> {result.email || "-"}</p>
             <p><strong>📱 Phone:</strong> {result.phone || "-"}</p>
             <p>
-              <strong>🌍 Country:</strong>{" "}
-              {result.county
-                ? `${getFlagEmoji(result.county)} ${countryMap[result.county.toUpperCase()] || result.county}`
-                : "-"}
+              <strong>🌍 Country:</strong> {result.county ? `${getFlagEmoji(result.county)} ${countryMap[result.county.toUpperCase()] || result.county}` : "-"}
             </p>
             <p>
-              <strong>📅 Join Date:</strong>{" "}
-              {result.created
-                ? new Date(result.created).toLocaleDateString("en-US", {
-                    year: "numeric", month: "long", day: "numeric"
-                  })
-                : "-"}
+              <strong>📅 Join Date:</strong> {result.created ? `${new Date(result.created).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })} (${getTimeSince(result.created)})` : "-"}
             </p>
-       <p><strong>💎 Eligible:</strong> {result.vgramx_eligible} vGRAMX</p>
-<p className="text-sm text-purple-300 ml-2">
-  Breakdown: {parseFloat(result.quantity_main).toFixed(6)} from <strong>Active Wallet</strong> +{" "}
-  {parseFloat(result.quantity_fractional).toFixed(6)} from <strong>Frozen Holdings</strong>
-</p>
-
-
+            <p><strong>💎 Eligible:</strong> {result.vgramx_eligible} vGRAMX</p>
+            <p className="text-sm text-purple-300 ml-2">
+              Breakdown: {parseFloat(result.quantity_main).toFixed(6)} from <strong>Active Wallet</strong> + {parseFloat(result.quantity_fractional).toFixed(6)} from <strong>Frozen Holdings</strong>
+            </p>
             <p className="pt-2 text-pink-300 font-semibold">
               🧠 Vyra77 Suggestion:
               <span className="text-white font-normal ml-1">{result.suggestion}</span>
             </p>
           </>
         ) : (
-          <p className="text-gray-400 text-center">
-            👤 User info will appear here after checking.
-          </p>
+          <p className="text-gray-400 text-center">👤 User info will appear here after checking.</p>
         )}
 
-        {error && (
-          <p className="mt-3 text-red-400 font-medium">{error}</p>
-        )}
+        {error && <p className="mt-3 text-red-400 font-medium">{error}</p>}
       </div>
+
+      {stats && (
+        <div className="w-full max-w-2xl mt-10 text-sm text-gray-200 text-center space-y-2">
+          <p>📊 <strong>Total Users:</strong> {stats.total_users.toLocaleString()}</p>
+          <p>💰 <strong>Total DNC Liquid:</strong> {stats.total_main.toLocaleString()} | 🧊 <strong>Frozen:</strong> {stats.total_frozen.toLocaleString()}</p>
+          <p>🔁 <strong>Most Frequent Search:</strong> {stats.top_user}</p>
+          <p>🌍 <strong>Top Country:</strong> {getFlagEmoji(stats.top_country)} {countryMap[stats.top_country] || stats.top_country}</p>
+        </div>
+      )}
     </div>
   );
 }
