@@ -1,22 +1,18 @@
 import { useState } from "react";
 import api from "../lib/api";
 
-// 🌍 Full ISO Country Code → Country Name
+// 🌍 ISO Country → Full Name
 const countryMap = {
   MY: "Malaysia", ID: "Indonesia", BD: "Bangladesh", IN: "India", PH: "Philippines",
-  SG: "Singapore", TH: "Thailand", VN: "Vietnam", JP: "Japan", CN: "China", US: "United States",
-  GB: "United Kingdom", AU: "Australia", CA: "Canada", AE: "United Arab Emirates",
-  // Add more if needed...
+  SG: "Singapore", TH: "Thailand", VN: "Vietnam", JP: "Japan", CN: "China",
+  US: "United States", GB: "United Kingdom", AU: "Australia", CA: "Canada", AE: "UAE"
 };
 
-// 🇺🇳 Country Code → Flag Emoji
-const getFlagEmoji = (code) => {
-  if (!code || typeof code !== "string") return "";
-  const cc = code.toUpperCase();
-  return cc.replace(/./g, char =>
-    String.fromCodePoint(127397 + char.charCodeAt())
+// 🇺🇳 Convert country code to emoji flag
+const getFlagEmoji = (code) =>
+  code?.toUpperCase().replace(/./g, c =>
+    String.fromCodePoint(127397 + c.charCodeAt())
   );
-};
 
 export default function Home() {
   const [username, setUsername] = useState("");
@@ -39,22 +35,21 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#0d0d0d] text-white font-sans px-6 py-10 flex flex-col items-center justify-center">
-      {/* Heading */}
-      <h1 className="text-3xl md:text-4xl font-bold text-purple-400 mb-10">
+      {/* Title */}
+      <h1 className="text-3xl md:text-4xl font-bold text-purple-400 mb-10 text-center">
         🔍 Check Your DDK Legacy (Pre-order ETPS) for vGRAMX
       </h1>
 
-      {/* Input Block */}
+      {/* Input */}
       <div className="bg-[#121212] border border-purple-700 rounded-xl shadow-lg p-6 w-full max-w-md mb-8">
         <label className="block text-sm text-purple-300 mb-2">Username or Email</label>
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="e.g. myusername or sample@email.com"
+          placeholder="e.g. fxbitlab or name@email.com"
           className="w-full px-4 py-2 rounded bg-black text-white border-2 border-[#292929] focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
         />
-
         <button
           onClick={checkClaim}
           disabled={loading || !username}
@@ -64,7 +59,7 @@ export default function Home() {
         </button>
       </div>
 
-      {/* Always Visible Info Box */}
+      {/* Output */}
       <div className="w-full max-w-2xl bg-[#0f0f0f] border border-[#3b1367] rounded-xl shadow-xl p-6 text-sm sm:text-base space-y-3">
         {result ? (
           <>
@@ -73,27 +68,23 @@ export default function Home() {
             <p><strong>📧 Email:</strong> {result.email || "-"}</p>
             <p><strong>📱 Phone:</strong> {result.phone || "-"}</p>
             <p>
-  <strong>🌍 Country:</strong>{" "}
-  {result.county
-    ? `${getFlagEmoji(result.county)} ${countryMap[result.county.toUpperCase()] || result.county}`
-    : "-"}
-</p>
-
+              <strong>🌍 Country:</strong>{" "}
+              {result.county
+                ? `${getFlagEmoji(result.county)} ${countryMap[result.county.toUpperCase()] || result.county}`
+                : "-"}
+            </p>
             <p>
               <strong>📅 Join Date:</strong>{" "}
               {result.created
                 ? new Date(result.created).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
+                    year: "numeric", month: "long", day: "numeric"
                   })
                 : "-"}
             </p>
             <p><strong>💎 Eligible:</strong> {result.vgramx_eligible} vGRAMX</p>
-<p className="text-sm text-purple-300 ml-2">
-  Breakdown: <strong>{result.quantity_main}</strong> from <em>existing_etps_assets</em> + <strong>{result.quantity_fractional}</strong> from <em>existing_etps_assets_f</em>
-</p>
-
+            <p className="text-sm text-purple-300 ml-2">
+              Breakdown: {result.quantity_main} main + {result.quantity_fractional} fractional
+            </p>
             <p className="pt-2 text-pink-300 font-semibold">
               🧠 Vyra77 Suggestion:
               <span className="text-white font-normal ml-1">{result.suggestion}</span>
@@ -106,9 +97,7 @@ export default function Home() {
         )}
 
         {error && (
-          <p className="mt-3 text-red-400 font-medium">
-            {error}
-          </p>
+          <p className="mt-3 text-red-400 font-medium">{error}</p>
         )}
       </div>
     </div>
