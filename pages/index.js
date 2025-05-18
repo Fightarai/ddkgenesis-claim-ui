@@ -1,6 +1,23 @@
 import { useState } from "react";
 import api from "../lib/api";
 
+// 🌍 Full ISO Country Code → Country Name
+const countryMap = {
+  MY: "Malaysia", ID: "Indonesia", BD: "Bangladesh", IN: "India", PH: "Philippines",
+  SG: "Singapore", TH: "Thailand", VN: "Vietnam", JP: "Japan", CN: "China", US: "United States",
+  GB: "United Kingdom", AU: "Australia", CA: "Canada", AE: "United Arab Emirates",
+  // Add more if needed...
+};
+
+// 🇺🇳 Country Code → Flag Emoji
+const getFlagEmoji = (code) => {
+  if (!code || typeof code !== "string") return "";
+  const cc = code.toUpperCase();
+  return cc.replace(/./g, char =>
+    String.fromCodePoint(127397 + char.charCodeAt())
+  );
+};
+
 export default function Home() {
   const [username, setUsername] = useState("");
   const [result, setResult] = useState(null);
@@ -55,7 +72,13 @@ export default function Home() {
             <p><strong>📛 Full Name:</strong> {result.name || "-"}</p>
             <p><strong>📧 Email:</strong> {result.email || "-"}</p>
             <p><strong>📱 Phone:</strong> {result.phone || "-"}</p>
-            <p><strong>🌍 Country:</strong> {result.county || "-"}</p>
+            <p>
+  <strong>🌍 Country:</strong>{" "}
+  {result.county
+    ? `${getFlagEmoji(result.county)} ${countryMap[result.county.toUpperCase()] || result.county}`
+    : "-"}
+</p>
+
             <p>
               <strong>📅 Join Date:</strong>{" "}
               {result.created
