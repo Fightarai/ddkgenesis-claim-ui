@@ -13,36 +13,49 @@ export default function Home() {
       setError("");
     } catch (err) {
       setResult(null);
-      setError("User not found or error. Try again.");
+      setError("❌ User not found or server error.");
     }
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-10 flex flex-col items-center">
-      <h1 className="text-3xl font-bold mb-6">🔍 Check Your vGRAMX</h1>
-      <input
-        type="text"
-        className="text-black px-4 py-2 rounded w-64"
-        placeholder="Enter username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
+    <div className="min-h-screen bg-gradient-to-br from-black via-[#1e052d] to-[#130013] text-white flex flex-col items-center justify-center p-6">
+      <h1 className="text-4xl font-extrabold mb-10 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-fuchsia-400 to-pink-500">
+        🔍 Check Your vGRAMX
+      </h1>
+
+      {/* INPUT BOX */}
+      <div className="relative w-full max-w-sm mb-6">
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Enter your username"
+          className="w-full px-5 py-3 bg-black border-2 border-purple-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-pink-500 placeholder-gray-400"
+        />
+      </div>
+
       <button
-        className="mt-4 bg-green-500 px-4 py-2 rounded"
         onClick={checkClaim}
+        className="bg-gradient-to-r from-green-400 to-green-600 hover:from-green-300 hover:to-green-500 text-black font-bold px-6 py-2 rounded-xl shadow-xl transition-all"
       >
-        Check Now
+        ✅ Check Now
       </button>
 
       {result && (
-        <div className="bg-gray-800 p-6 rounded mt-6 max-w-lg w-full text-left">
-          <p><strong>👤 Username:</strong> {result.username}</p>
-          <p><strong>💎 Eligible:</strong> {result.vgramx_eligible} vGRAMX</p>
-          <p><strong>🧠 Suggestion:</strong> {result.suggestion}</p>
+        <div className="mt-10 bg-[#180022]/90 border-2 border-purple-700 rounded-xl p-6 w-full max-w-xl text-left shadow-xl backdrop-blur-lg">
+          <p className="text-lg font-bold text-purple-300 mb-2">
+            🧑‍💻 <span className="text-white">Username:</span> {result.username}
+          </p>
+          <p className="text-lg font-bold text-blue-300 mb-2">
+            💎 <span className="text-white">Eligible:</span> {result.vgramx_eligible} vGRAMX
+          </p>
+          <p className="text-lg font-bold text-pink-300">
+            🧠 <span className="text-white">Suggestion:</span> {result.suggestion}
+          </p>
         </div>
       )}
 
-      {error && <p className="mt-4 text-red-400">{error}</p>}
+      {error && <p className="mt-6 text-red-500">{error}</p>}
     </div>
   );
 }
