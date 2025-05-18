@@ -51,12 +51,21 @@ export default function Home() {
       <div className="w-full max-w-2xl bg-[#0f0f0f] border border-[#3b1367] rounded-xl shadow-xl p-6 text-sm sm:text-base space-y-3">
         {result ? (
           <>
-            <p><strong>👤 Username:</strong> {result.username}</p>
+            <p><strong>👤 Username:</strong> {result.username || "-"}</p>
             <p><strong>📛 Full Name:</strong> {result.name || "-"}</p>
             <p><strong>📧 Email:</strong> {result.email || "-"}</p>
             <p><strong>📱 Phone:</strong> {result.phone || "-"}</p>
             <p><strong>🌍 Country:</strong> {result.county || "-"}</p>
-            <p><strong>📅 Join Date:</strong> {new Date(result.created).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
+            <p>
+              <strong>📅 Join Date:</strong>{" "}
+              {result.created
+                ? new Date(result.created).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })
+                : "-"}
+            </p>
             <p><strong>💎 Eligible:</strong> {result.vgramx_eligible} vGRAMX</p>
             <p className="pt-2 text-pink-300 font-semibold">
               🧠 Vyra77 Suggestion:
