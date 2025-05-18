@@ -83,9 +83,10 @@ export default function Home() {
             </p>
        <p><strong>💎 Eligible:</strong> {result.vgramx_eligible} vGRAMX</p>
 <p className="text-sm text-purple-300 ml-2">
-  Breakdown: {parseFloat(result.quantity_main).toFixed(6)} from <i>existing_etps_assets</i> +{" "}
-  {parseFloat(result.quantity_fractional).toFixed(6)} from <i>existing_etps_assets_f</i>
+  Breakdown: {parseFloat(result.quantity_main).toFixed(6)} from <strong>Active Wallet</strong> +{" "}
+  {parseFloat(result.quantity_fractional).toFixed(6)} from <strong>Frozen Holdings</strong>
 </p>
+
 
             <p className="pt-2 text-pink-300 font-semibold">
               🧠 Vyra77 Suggestion:
