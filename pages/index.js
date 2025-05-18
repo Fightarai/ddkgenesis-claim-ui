@@ -90,6 +90,10 @@ export default function Home() {
                 : "-"}
             </p>
             <p><strong>💎 Eligible:</strong> {result.vgramx_eligible} vGRAMX</p>
+<p className="text-sm text-purple-300 ml-2">
+  Breakdown: <strong>{result.quantity_main}</strong> from <em>existing_etps_assets</em> + <strong>{result.quantity_fractional}</strong> from <em>existing_etps_assets_f</em>
+</p>
+
             <p className="pt-2 text-pink-300 font-semibold">
               🧠 Vyra77 Suggestion:
               <span className="text-white font-normal ml-1">{result.suggestion}</span>
