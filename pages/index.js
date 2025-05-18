@@ -81,10 +81,12 @@ export default function Home() {
                   })
                 : "-"}
             </p>
-            <p><strong>💎 Eligible:</strong> {result.vgramx_eligible} vGRAMX</p>
-            <p className="text-sm text-purple-300 ml-2">
-              Breakdown: {result.quantity_main} main + {result.quantity_fractional} fractional
-            </p>
+       <p><strong>💎 Eligible:</strong> {result.vgramx_eligible} vGRAMX</p>
+<p className="text-sm text-purple-300 ml-2">
+  Breakdown: {parseFloat(result.quantity_main).toFixed(6)} from <i>existing_etps_assets</i> +{" "}
+  {parseFloat(result.quantity_fractional).toFixed(6)} from <i>existing_etps_assets_f</i>
+</p>
+
             <p className="pt-2 text-pink-300 font-semibold">
               🧠 Vyra77 Suggestion:
               <span className="text-white font-normal ml-1">{result.suggestion}</span>
