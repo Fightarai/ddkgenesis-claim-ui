@@ -15,7 +15,7 @@ export default function Home() {
       const res = await api.get(`/api/claim-check?username=${username}`);
       setResult(res.data);
     } catch (err) {
-      setError("❌ User not found or API error.");
+      setError("❌ User not found or API got error.");
     }
     setLoading(false);
   };
@@ -24,17 +24,17 @@ export default function Home() {
     <div className="min-h-screen bg-[#0d0d0d] text-white font-sans px-6 py-10 flex flex-col items-center justify-center">
       {/* Heading */}
       <h1 className="text-3xl md:text-4xl font-bold text-purple-400 mb-10">
-        🔍 Check Your vGRAMX
+        🔍 Check Your DDK Legacy (Pre-order ETPS) for vGRAMX
       </h1>
 
       {/* Input Block */}
       <div className="bg-[#121212] border border-purple-700 rounded-xl shadow-lg p-6 w-full max-w-md mb-8">
-        <label className="block text-sm text-purple-300 mb-2">Username</label>
+        <label className="block text-sm text-purple-300 mb-2">Username or Email</label>
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="Enter username"
+          placeholder="e.g. myusername or sample@email.com"
           className="w-full px-4 py-2 rounded bg-black text-white border-2 border-[#292929] focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
         />
 
