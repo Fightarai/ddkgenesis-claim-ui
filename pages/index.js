@@ -42,18 +42,18 @@ export default function Home() {
       </button>
 
       {result && (
-        <div className="mt-10 bg-[#180022]/90 border-2 border-purple-700 rounded-xl p-6 w-full max-w-xl text-left shadow-xl backdrop-blur-lg">
-          <p className="text-lg font-bold text-purple-300 mb-2">
-            🧑‍💻 <span className="text-white">Username:</span> {result.username}
-          </p>
-          <p className="text-lg font-bold text-blue-300 mb-2">
-            💎 <span className="text-white">Eligible:</span> {result.vgramx_eligible} vGRAMX
-          </p>
-          <p className="text-lg font-bold text-pink-300">
-            🧠 <span className="text-white">Suggestion:</span> {result.suggestion}
-          </p>
-        </div>
-      )}
+  <div className="mt-10 bg-[#180022]/90 border-2 border-purple-700 rounded-xl p-6 w-full max-w-xl text-left shadow-xl backdrop-blur-lg space-y-2">
+    <p>👤 <span className="text-purple-200 font-semibold">Username:</span> {result.username}</p>
+    <p>📛 <span className="text-purple-200 font-semibold">Full Name:</span> {result.name || "-"}</p>
+    <p>📧 <span className="text-purple-200 font-semibold">Email:</span> {result.email || "-"}</p>
+    <p>📱 <span className="text-purple-200 font-semibold">Phone:</span> {result.phone || "-"}</p>
+    <p>🌍 <span className="text-purple-200 font-semibold">Country:</span> {result.county || "-"}</p>
+    <p>📅 <span className="text-purple-200 font-semibold">Join Date:</span> {new Date(result.created).toLocaleDateString()}</p>
+    <p>💎 <span className="text-blue-300 font-semibold">Eligible:</span> {result.vgramx_eligible} vGRAMX</p>
+    <p>🧠 <span className="text-pink-400 font-semibold">Vyra77 Suggestion:</span> {result.suggestion}</p>
+  </div>
+)}
+
 
       {error && <p className="mt-6 text-red-500">{error}</p>}
     </div>
