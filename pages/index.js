@@ -71,7 +71,7 @@ export default function Home() {
   const fetchStats = async () => {
     try {
       const [baseStats, distribution] = await Promise.all([
-        api.get("/claim-stats"), // ✅ ← add comma here
+        api.get("https://ddkgenesis-claim-api-to5k4.kinsta.app/api/claim-stats"),
         api.get("https://ddkgenesis-claim-api-to5k4.kinsta.app/api/dnc-distribution")
       ]);
       setStats({
