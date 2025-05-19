@@ -5,7 +5,27 @@ import { CategoryScale, Chart as ChartJS, LinearScale, BarElement, Tooltip, Lege
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
-const countryMap = { /* same as before, trimmed for brevity */ };
+const countryMap = {
+  MY: "Malaysia", ID: "Indonesia", BD: "Bangladesh", IN: "India", PH: "Philippines",
+  SG: "Singapore", TH: "Thailand", VN: "Vietnam", JP: "Japan", CN: "China",
+  US: "United States", GB: "United Kingdom", AU: "Australia", CA: "Canada", AE: "UAE",
+  BN: "Brunei", KH: "Cambodia", EG: "Egypt", MM: "Myanmar", TW: "Taiwan", MO: "Macau",
+  LA: "Laos", QA: "Qatar", SA: "Saudi Arabia", KR: "South Korea", MV: "Maldives",
+  BE: "Belgium", NL: "Netherlands", HK: "Hong Kong", FR: "France", YE: "Yemen",
+  MW: "Malawi", NZ: "New Zealand", MX: "Mexico", IE: "Ireland", ML: "Mali", AF: "Afghanistan",
+  CZ: "Czech Republic", MT: "Malta", CO: "Colombia", BG: "Bulgaria", DE: "Germany",
+  BR: "Brazil", BH: "Bahrain", NG: "Nigeria", CH: "Switzerland", TR: "Turkey", IR: "Iran",
+  JO: "Jordan", PK: "Pakistan", KP: "North Korea", MQ: "Martinique", CM: "Cameroon",
+  KW: "Kuwait", MC: "Monaco", BF: "Burkina Faso", NO: "Norway", MH: "Marshall Islands",
+  DZ: "Algeria", IT: "Italy", IQ: "Iraq", AT: "Austria", AR: "Argentina", BW: "Botswana",
+  CV: "Cape Verde", BV: "Bouvet Island", TK: "Tokelau", PL: "Poland", ES: "Spain",
+  TC: "Turks and Caicos", AS: "American Samoa", KY: "Cayman Islands", IS: "Iceland",
+  SY: "Syria", ZM: "Zambia", BA: "Bosnia", OM: "Oman", VE: "Venezuela", IL: "Israel",
+  TJ: "Tajikistan", LI: "Liechtenstein", JM: "Jamaica", AW: "Aruba", VI: "Virgin Islands",
+  ZA: "South Africa", IDN: "Indonesia", KE: "Kenya", EE: "Estonia", GH: "Ghana",
+  LS: "Lesotho", BS: "Bahamas", MK: "North Macedonia", FI: "Finland", HN: "Honduras",
+  MA: "Morocco"
+};
 
 const getFlagEmoji = (code) => {
   try {
@@ -93,6 +113,31 @@ export default function Home() {
           {loading ? "⏳ Checking..." : "✅ Check Now"}
         </button>
       </div>
+
+      {result && (
+        <div className="w-full max-w-2xl bg-[#0f0f0f] border border-[#3b1367] rounded-xl shadow-xl p-6 text-sm sm:text-base space-y-3">
+          <p><strong>👤 Username:</strong> {result.username || "-"}</p>
+          <p><strong>✅ Full Name:</strong> {result.name || "-"}</p>
+          <p><strong>📧 Email:</strong> {result.email || "-"}</p>
+          <p><strong>📱 Phone:</strong> {result.phone || "-"}</p>
+          <p>
+            <strong>🌍 Country:</strong> {typeof result.county === "string" && /^[A-Z]{2}$/.test(result.county.toUpperCase())
+              ? `${getFlagEmoji(result.county)} ${countryMap[result.county.toUpperCase()] || result.county}`
+              : "🌍 Unknown"}
+          </p>
+          <p>
+            <strong>📅 Join Date:</strong> {result.created ? `${new Date(result.created).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })} (${getTimeSince(result.created)})` : "-"}
+          </p>
+          <p><strong>💎 Eligible:</strong> {result.vgramx_eligible} vGRAMX</p>
+          <p className="text-sm text-purple-300 ml-2">
+            Breakdown: {parseFloat(result.quantity_main).toFixed(6)} from <strong>Active Wallet</strong> + {parseFloat(result.quantity_fractional).toFixed(6)} from <strong>Frozen Holdings</strong>
+          </p>
+          <p className="pt-2 text-pink-300 font-semibold">
+            🧠 Vyra77 Suggestion:
+            <span className="text-white font-normal ml-1">{result.suggestion}</span>
+          </p>
+        </div>
+      )}
 
       {stats && (
         <div className="w-full max-w-2xl mt-4 text-sm text-gray-200 text-center space-y-6">
