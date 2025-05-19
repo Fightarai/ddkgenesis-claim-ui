@@ -177,7 +177,9 @@ export default function Home() {
             <p><strong>📧 Email:</strong> {result.email || "-"}</p>
             <p><strong>📱 Phone:</strong> {result.phone || "-"}</p>
             <p>
-              <strong>🌍 Country:</strong> {result.county ? `${getFlagEmoji(result.county)} ${countryMap[result.county.toUpperCase()] || result.county}` : "-"}
+              <strong>🌍 Country:</strong> {typeof result.county === "string" && /^[A-Z]{2}$/.test(result.county.toUpperCase())
+  ? `${getFlagEmoji(result.county)} ${countryMap[result.county.toUpperCase()] || result.county}`
+  : "🌍 Unknown"}
             </p>
             <p>
               <strong>📅 Join Date:</strong> {result.created ? `${new Date(result.created).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })} (${getTimeSince(result.created)})` : "-"}
