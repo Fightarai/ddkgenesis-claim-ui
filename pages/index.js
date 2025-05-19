@@ -68,13 +68,22 @@ export default function Home() {
   };
 
   useEffect(() => {
-  api.get("/api/claim-stats")
-    .then(res => setStats(res.data))
-    .catch(() => {});
+  const fetchStats = async () => {
+    try {
+      const [baseStats, distribution] = await Promise.all([
+        api.get("/api/claim-stats"),
+        api.get("https://ddkgenesis-claim-api-to5k4.kinsta.app/api/dnc-distribution")
+      ]);
+      setStats({
+        ...baseStats.data,
+        chart: distribution.data.chart
+      });
+    } catch (err) {
+      console.error("📉 Failed to fetch stats:", err);
+    }
+  };
 
-  api.get("https://ddkgenesis-claim-api-to5k4.kinsta.app/api/dnc-distribution")
-    .then(res => setStats(prev => ({ ...prev, chart: res.data.chart })))
-    .catch(() => {});
+  fetchStats();
 }, []);
 
   return (
