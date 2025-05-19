@@ -75,7 +75,12 @@ export default function Home() {
 
       {/* Full screen blur loading overlay */}
       {loadingStats && (
-        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/80 backdrop-blur-md">
+        {loadingStats && (
+  <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/80 backdrop-blur-md">
+    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500 border-opacity-70 mb-4"></div>
+    <p className="text-purple-200 text-center px-4 text-sm">⚙️ Initializing and analyzing 9 years of legacy data. Please wait...</p>
+  </div>
+)}
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500 border-opacity-70 mb-4"></div>
           <p className="text-purple-200 text-center px-4 text-sm">⚙️ Initializing and analyzing 9 years of legacy data. Please wait...</p>
         </div>
