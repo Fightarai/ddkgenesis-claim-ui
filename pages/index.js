@@ -59,7 +59,7 @@ export default function Home() {
     setError("");
     setResult(null);
     try {
-      const res = await api.get(`/api/claim-check?username=${username}`);
+      const res = await api.get(`https://ddkgenesis-claim-api-to5k4.kinsta.app/api/claim-check?username=${username}`);
       setResult(res.data);
     } catch (err) {
       setError("❌ User not found or API got error.");
