@@ -1,104 +1,30 @@
 import { useState, useEffect } from "react";
 import api from "../lib/api";
+import { Bar } from "react-chartjs-2";
+import { CategoryScale, Chart as ChartJS, LinearScale, BarElement, Tooltip, Legend } from "chart.js";
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 const countryMap = {
-  MY: "Malaysia",
-  ID: "Indonesia",
-  BD: "Bangladesh",
-  IN: "India",
-  PH: "Philippines",
-  SG: "Singapore",
-  TH: "Thailand",
-  VN: "Vietnam",
-  JP: "Japan",
-  CN: "China",
-  US: "United States",
-  GB: "United Kingdom",
-  AU: "Australia",
-  CA: "Canada",
-  AE: "UAE",
-  // Add more below⬇️
-  BN: "Brunei",
-  KH: "Cambodia",
-  EG: "Egypt",
-  MM: "Myanmar",
-  TW: "Taiwan",
-  MO: "Macau",
-  LA: "Laos",
-  QA: "Qatar",
-  SA: "Saudi Arabia",
-  KR: "South Korea",
-  MV: "Maldives",
-  BE: "Belgium",
-  NL: "Netherlands",
-  HK: "Hong Kong",
-  FR: "France",
-  YE: "Yemen",
-  MW: "Malawi",
-  NZ: "New Zealand",
-  MX: "Mexico",
-  IE: "Ireland",
-  ML: "Mali",
-  AF: "Afghanistan",
-  CZ: "Czech Republic",
-  MT: "Malta",
-  CO: "Colombia",
-  BG: "Bulgaria",
-  DE: "Germany",
-  BR: "Brazil",
-  BH: "Bahrain",
-  NG: "Nigeria",
-  CH: "Switzerland",
-  TR: "Turkey",
-  IR: "Iran",
-  JO: "Jordan",
-  PK: "Pakistan",
-  KP: "North Korea",
-  MQ: "Martinique",
-  CM: "Cameroon",
-  KW: "Kuwait",
-  MC: "Monaco",
-  BF: "Burkina Faso",
-  NO: "Norway",
-  MH: "Marshall Islands",
-  DZ: "Algeria",
-  IT: "Italy",
-  IQ: "Iraq",
-  AT: "Austria",
-  AR: "Argentina",
-  BW: "Botswana",
-  CV: "Cape Verde",
-  BV: "Bouvet Island",
-  TK: "Tokelau",
-  PL: "Poland",
-  ES: "Spain",
-  TC: "Turks and Caicos",
-  AS: "American Samoa",
-  KY: "Cayman Islands",
-  IS: "Iceland",
-  SY: "Syria",
-  ZM: "Zambia",
-  BA: "Bosnia",
-  OM: "Oman",
-  VE: "Venezuela",
-  IL: "Israel",
-  TJ: "Tajikistan",
-  LI: "Liechtenstein",
-  JM: "Jamaica",
-  AW: "Aruba",
-  VI: "Virgin Islands",
-  ZA: "South Africa",
-  IDN: "Indonesia",
-  KE: "Kenya",
-  EE: "Estonia",
-  GH: "Ghana",
-  LS: "Lesotho",
-  BS: "Bahamas",
-  MK: "North Macedonia",
-  FI: "Finland",
-  HN: "Honduras"
+  MY: "Malaysia", ID: "Indonesia", BD: "Bangladesh", IN: "India", PH: "Philippines",
+  SG: "Singapore", TH: "Thailand", VN: "Vietnam", JP: "Japan", CN: "China",
+  US: "United States", GB: "United Kingdom", AU: "Australia", CA: "Canada", AE: "UAE",
+  BN: "Brunei", KH: "Cambodia", EG: "Egypt", MM: "Myanmar", TW: "Taiwan", MO: "Macau",
+  LA: "Laos", QA: "Qatar", SA: "Saudi Arabia", KR: "South Korea", MV: "Maldives",
+  BE: "Belgium", NL: "Netherlands", HK: "Hong Kong", FR: "France", YE: "Yemen",
+  MW: "Malawi", NZ: "New Zealand", MX: "Mexico", IE: "Ireland", ML: "Mali", AF: "Afghanistan",
+  CZ: "Czech Republic", MT: "Malta", CO: "Colombia", BG: "Bulgaria", DE: "Germany",
+  BR: "Brazil", BH: "Bahrain", NG: "Nigeria", CH: "Switzerland", TR: "Turkey", IR: "Iran",
+  JO: "Jordan", PK: "Pakistan", KP: "North Korea", MQ: "Martinique", CM: "Cameroon",
+  KW: "Kuwait", MC: "Monaco", BF: "Burkina Faso", NO: "Norway", MH: "Marshall Islands",
+  DZ: "Algeria", IT: "Italy", IQ: "Iraq", AT: "Austria", AR: "Argentina", BW: "Botswana",
+  CV: "Cape Verde", BV: "Bouvet Island", TK: "Tokelau", PL: "Poland", ES: "Spain",
+  TC: "Turks and Caicos", AS: "American Samoa", KY: "Cayman Islands", IS: "Iceland",
+  SY: "Syria", ZM: "Zambia", BA: "Bosnia", OM: "Oman", VE: "Venezuela", IL: "Israel",
+  TJ: "Tajikistan", LI: "Liechtenstein", JM: "Jamaica", AW: "Aruba", VI: "Virgin Islands",
+  ZA: "South Africa", IDN: "Indonesia", KE: "Kenya", EE: "Estonia", GH: "Ghana",
+  LS: "Lesotho", BS: "Bahamas", MK: "North Macedonia", FI: "Finland", HN: "Honduras"
 };
-
 
 const getFlagEmoji = (code) => {
   try {
@@ -143,6 +69,7 @@ export default function Home() {
 
   useEffect(() => {
     api.get("/api/claim-stats").then(res => setStats(res.data)).catch(() => {});
+    api.get("/api/dnc-distribution").then(res => setStats(prev => ({ ...prev, chart: res.data.chart }))).catch(() => {});
   }, []);
 
   return (
@@ -178,8 +105,8 @@ export default function Home() {
             <p><strong>📱 Phone:</strong> {result.phone || "-"}</p>
             <p>
               <strong>🌍 Country:</strong> {typeof result.county === "string" && /^[A-Z]{2}$/.test(result.county.toUpperCase())
-  ? `${getFlagEmoji(result.county)} ${countryMap[result.county.toUpperCase()] || result.county}`
-  : "🌍 Unknown"}
+                ? `${getFlagEmoji(result.county)} ${countryMap[result.county.toUpperCase()] || result.county}`
+                : "🌍 Unknown"}
             </p>
             <p>
               <strong>📅 Join Date:</strong> {result.created ? `${new Date(result.created).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })} (${getTimeSince(result.created)})` : "-"}
@@ -218,6 +145,31 @@ export default function Home() {
                 );
               })}
           </div>
+
+          {stats.chart && (
+            <div className="mt-10 w-full">
+              <h3 className="text-lg font-semibold text-center mb-4">📊 DNC Distribution by User Holding</h3>
+              <Bar
+                data={{
+                  labels: stats.chart.map(e => e.range),
+                  datasets: [{
+                    label: "Number of Users",
+                    data: stats.chart.map(e => e.count),
+                    backgroundColor: "rgba(147, 51, 234, 0.6)",
+                    borderColor: "rgba(147, 51, 234, 1)",
+                    borderWidth: 1
+                  }]
+                }}
+                options={{
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
+                  }
+                }}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>
