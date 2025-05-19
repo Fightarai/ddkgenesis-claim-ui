@@ -34,7 +34,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [stats, setStats] = useState(null);
-  const [loadingStats, setLoadingStats] = useState(true);
 
   const checkClaim = async () => {
     setLoading(true);
@@ -62,8 +61,6 @@ export default function Home() {
         });
       } catch (err) {
         console.error("📉 Failed to fetch stats:", err);
-      } finally {
-        setLoadingStats(false);
       }
     };
 
@@ -71,15 +68,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0d0d0d] text-white font-sans px-6 py-10 flex flex-col items-center justify-center relative">
-      {/* Full screen blur loading overlay */}
-      {loadingStats && (
-        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/80 backdrop-blur-md">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500 border-opacity-70 mb-4"></div>
-          <p className="text-purple-200 text-center px-4 text-sm">⚙️ Initializing and analyzing 9 years of legacy data. Please wait...</p>
-        </div>
-      )}
-
+    <div className="min-h-screen bg-[#0d0d0d] text-white font-sans px-6 py-10 flex flex-col items-center justify-center">
       <h1 className="text-3xl md:text-4xl font-bold text-purple-400 mb-10 text-center">
         🔍 Check Your DDK Legacy (Pre-order ETPS) for vGRAMX
       </h1>
@@ -127,7 +116,7 @@ export default function Home() {
         </div>
       )}
 
-      {stats && !loadingStats && (
+      {stats && (
         <div className="w-full max-w-2xl mt-10 text-sm text-gray-200 text-center space-y-6">
           <div className="bg-[#111] border border-purple-600 p-4 rounded-xl">
             <h3 className="text-base font-bold mb-1">📊 DNC Distribution by User Holding</h3>
