@@ -104,7 +104,14 @@ export default function Home() {
           <p>📊 <strong>Total Users:</strong> {stats.total_users.toLocaleString()}</p>
           <p>💰 <strong>Total DNC Liquid:</strong> {stats.total_main.toLocaleString()} | 🧊 <strong>Frozen:</strong> {stats.total_frozen.toLocaleString()}</p>
           <p>🔁 <strong>Last 3 Searches:</strong> {stats.last_searched.map((u, i) => <span key={i} className="ml-1 text-white">{u}</span>)}</p>
-          <p>🌍 <strong>Top Country:</strong> {getFlagEmoji(stats.top_country)} {countryMap[stats.top_country] || stats.top_country}</p>
+          <p>🌍 <strong>All Countries:</strong></p>
+          <div className="flex flex-wrap justify-center gap-2 mt-1">
+            {stats.all_countries.map((c, i) => (
+              <span key={i} className="bg-[#1e1e1e] px-2 py-1 rounded text-sm text-white border border-purple-500">
+                {getFlagEmoji(c._id)} {countryMap[c._id] || c._id} ({c.count})
+              </span>
+            ))}
+          </div>
         </div>
       )}
     </div>
