@@ -34,6 +34,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [stats, setStats] = useState(null);
+  const [loadingStats, setLoadingStats] = useState(true);
 
   const checkClaim = async () => {
     setLoading(true);
@@ -61,6 +62,8 @@ export default function Home() {
         });
       } catch (err) {
         console.error("📉 Failed to fetch stats:", err);
+      } finally {
+        setLoadingStats(false);
       }
     };
 
@@ -127,24 +130,28 @@ export default function Home() {
             />
           </div>
 
-          <div className="mt-6 text-sm text-gray-200 text-center space-y-2">
-            <p>📌 <strong>Total Users:</strong> {stats.total_users.toLocaleString()}</p>
-            <p>💰 <strong>Total DNC Liquid:</strong> {stats.total_main.toLocaleString()} | 🧊 <strong>Frozen:</strong> {stats.total_frozen.toLocaleString()}</p>
-            <p>🔁 <strong>Last 3 Searches:</strong> {stats.last_searched.map((u, i) => <span key={i} className="ml-1 text-white">{u}</span>)}</p>
-            <p>🌍 <strong>All Countries:</strong></p>
-            <div className="flex flex-wrap justify-center gap-2 mt-1">
-              {Array.isArray(stats.all_countries) && stats.all_countries
-                .filter(c => c && c._id)
-                .map((c, i) => {
-                  const code = String(c._id).toUpperCase();
-                  return (
-                    <span key={i} className="bg-[#1e1e1e] px-2 py-1 rounded text-sm text-white border border-purple-500">
-                      {getFlagEmoji(code)} {countryMap[code] || code} ({c.count})
-                    </span>
-                  );
-                })}
+          {loadingStats ? (
+            <p className="mt-6 text-purple-300">⚙️ System initializing legacy data... please wait 2 seconds while we analyze 9 years of network distribution.</p>
+          ) : (
+            <div className="mt-6 text-sm text-gray-200 text-center space-y-2">
+              <p>📌 <strong>Total Users:</strong> {stats.total_users.toLocaleString()}</p>
+              <p>💰 <strong>Total DNC Liquid:</strong> {stats.total_main.toLocaleString()} | 🧊 <strong>Frozen:</strong> {stats.total_frozen.toLocaleString()}</p>
+              <p>🔁 <strong>Last 3 Searches:</strong> {stats.last_searched.map((u, i) => <span key={i} className="ml-1 text-white">{u}</span>)}</p>
+              <p>🌍 <strong>All Countries:</strong></p>
+              <div className="flex flex-wrap justify-center gap-2 mt-1">
+                {Array.isArray(stats.all_countries) && stats.all_countries
+                  .filter(c => c && c._id)
+                  .map((c, i) => {
+                    const code = String(c._id).toUpperCase();
+                    return (
+                      <span key={i} className="bg-[#1e1e1e] px-2 py-1 rounded text-sm text-white border border-purple-500">
+                        {getFlagEmoji(code)} {countryMap[code] || code} ({c.count})
+                      </span>
+                    );
+                  })}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </div>
