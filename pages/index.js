@@ -111,8 +111,10 @@ export default function Home() {
         </button>
       </div>
 
-      <div className="w-full max-w-2xl text-sm sm:text-base text-gray-400 text-center mb-10">
-        {!result && !loading && <p className="text-gray-500">👤 User info will appear here after checking.</p>}
+      <div className="w-full max-w-2xl bg-[#0f0f0f] border border-[#3b1367] rounded-xl shadow-xl p-6 text-sm sm:text-base text-gray-400 text-center mb-10">
+        {!result && !loading && (
+          <p className="text-gray-500">👤 User info will appear here after checking.</p>
+        )}
         {error && <p className="mt-3 text-red-400 font-medium">{error}</p>}
       </div>
 
