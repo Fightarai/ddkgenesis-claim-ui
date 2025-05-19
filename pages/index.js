@@ -68,9 +68,14 @@ export default function Home() {
   };
 
   useEffect(() => {
-    api.get("/api/claim-stats").then(res => setStats(res.data)).catch(() => {});
-    api.get("/api/dnc-distribution").then(res => setStats(prev => ({ ...prev, chart: res.data.chart }))).catch(() => {});
-  }, []);
+  api.get("/api/claim-stats")
+    .then(res => setStats(res.data))
+    .catch(() => {});
+
+  api.get("https://ddkgenesis-claim-api-to5k4.kinsta.app/api/dnc-distribution")
+    .then(res => setStats(prev => ({ ...prev, chart: res.data.chart })))
+    .catch(() => {});
+}, []);
 
   return (
     <div className="min-h-screen bg-[#0d0d0d] text-white font-sans px-6 py-10 flex flex-col items-center justify-center">
