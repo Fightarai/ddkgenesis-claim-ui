@@ -5,7 +5,27 @@ import { CategoryScale, Chart as ChartJS, LinearScale, BarElement, Tooltip, Lege
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
-const countryMap = { /* same as before */ };
+const countryMap = {
+  MY: "Malaysia", ID: "Indonesia", BD: "Bangladesh", IN: "India", PH: "Philippines",
+  SG: "Singapore", TH: "Thailand", VN: "Vietnam", JP: "Japan", CN: "China",
+  US: "United States", GB: "United Kingdom", AU: "Australia", CA: "Canada", AE: "UAE",
+  BN: "Brunei", KH: "Cambodia", EG: "Egypt", MM: "Myanmar", TW: "Taiwan", MO: "Macau",
+  LA: "Laos", QA: "Qatar", SA: "Saudi Arabia", KR: "South Korea", MV: "Maldives",
+  BE: "Belgium", NL: "Netherlands", HK: "Hong Kong", FR: "France", YE: "Yemen",
+  MW: "Malawi", NZ: "New Zealand", MX: "Mexico", IE: "Ireland", ML: "Mali", AF: "Afghanistan",
+  CZ: "Czech Republic", MT: "Malta", CO: "Colombia", BG: "Bulgaria", DE: "Germany",
+  BR: "Brazil", BH: "Bahrain", NG: "Nigeria", CH: "Switzerland", TR: "Turkey", IR: "Iran",
+  JO: "Jordan", PK: "Pakistan", KP: "North Korea", MQ: "Martinique", CM: "Cameroon",
+  KW: "Kuwait", MC: "Monaco", BF: "Burkina Faso", NO: "Norway", MH: "Marshall Islands",
+  DZ: "Algeria", IT: "Italy", IQ: "Iraq", AT: "Austria", AR: "Argentina", BW: "Botswana",
+  CV: "Cape Verde", BV: "Bouvet Island", TK: "Tokelau", PL: "Poland", ES: "Spain",
+  TC: "Turks and Caicos", AS: "American Samoa", KY: "Cayman Islands", IS: "Iceland",
+  SY: "Syria", ZM: "Zambia", BA: "Bosnia", OM: "Oman", VE: "Venezuela", IL: "Israel",
+  TJ: "Tajikistan", LI: "Liechtenstein", JM: "Jamaica", AW: "Aruba", VI: "Virgin Islands",
+  ZA: "South Africa", IDN: "Indonesia", KE: "Kenya", EE: "Estonia", GH: "Ghana",
+  LS: "Lesotho", BS: "Bahamas", MK: "North Macedonia", FI: "Finland", HN: "Honduras",
+  MA: "Morocco"
+};
 
 const getFlagEmoji = (code) => {
   try {
@@ -91,6 +111,11 @@ export default function Home() {
         </button>
       </div>
 
+      <div className="w-full max-w-2xl text-sm sm:text-base text-gray-400 text-center mb-10">
+        {!result && !loading && <p className="text-gray-500">👤 User info will appear here after checking.</p>}
+        {error && <p className="mt-3 text-red-400 font-medium">{error}</p>}
+      </div>
+
       {result && (
         <div className="w-full max-w-2xl bg-[#0f0f0f] border border-[#3b1367] rounded-xl shadow-xl p-6 text-sm sm:text-base space-y-3">
           <p><strong>👤 Username:</strong> {result.username || "-"}</p>
@@ -99,7 +124,7 @@ export default function Home() {
           <p><strong>📱 Phone:</strong> {result.phone || "-"}</p>
           <p>
             <strong>🌍 Country:</strong> {typeof result.county === "string" && /^[A-Z]{2}$/.test(result.county.toUpperCase())
-              ? `${getFlagEmoji(result.county)} ${countryMap[result.county.toUpperCase()] || result.county}`
+              ? `${getFlagEmoji(result.county)} ${countryMap[result.county.toUpperCase()] || "Unknown Country"}`
               : "🌍 Unknown"}
           </p>
           <p>
@@ -164,7 +189,7 @@ export default function Home() {
                   const code = String(c._id).toUpperCase();
                   return (
                     <span key={i} className="bg-[#1e1e1e] px-2 py-1 rounded text-sm text-white border border-purple-500">
-                      {getFlagEmoji(code)} {countryMap[code] || code} ({c.count})
+                      {getFlagEmoji(code)} {countryMap[code] || "Unknown Country"} ({c.count})
                     </span>
                   );
                 })}
