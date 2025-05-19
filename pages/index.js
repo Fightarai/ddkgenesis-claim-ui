@@ -106,11 +106,16 @@ export default function Home() {
           <p>🔁 <strong>Last 3 Searches:</strong> {stats.last_searched.map((u, i) => <span key={i} className="ml-1 text-white">{u}</span>)}</p>
           <p>🌍 <strong>All Countries:</strong></p>
           <div className="flex flex-wrap justify-center gap-2 mt-1">
-            {stats.all_countries.map((c, i) => (
-              <span key={i} className="bg-[#1e1e1e] px-2 py-1 rounded text-sm text-white border border-purple-500">
-                {getFlagEmoji(c._id)} {countryMap[c._id] || c._id} ({c.count})
-              </span>
-            ))}
+            {stats.all_countries
+  .filter(c => typeof c._id === "string" && c._id.trim() !== "")
+  .map((c, i) => {
+    const code = c._id.toUpperCase();
+              return (
+                <span key={i} className="bg-[#1e1e1e] px-2 py-1 rounded text-sm text-white border border-purple-500">
+                  {getFlagEmoji(code)} {countryMap[code] || code} ({c.count})
+                </span>
+              );
+            })}
           </div>
         </div>
       )}
